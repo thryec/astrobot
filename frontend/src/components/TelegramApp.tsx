@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { WebAppUser } from "@/types/telegram";
 
+import Image from "next/image";
+
 export function TelegramApp() {
   const [isReady, setIsReady] = useState(false);
   const [user, setUser] = useState<WebAppUser | null>(null);
@@ -54,7 +56,7 @@ export function TelegramApp() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 py-3">
         <div className="flex items-center gap-3">
           {user.photo_url && (
-            <img
+            <Image
               src={user.photo_url}
               alt={user.first_name}
               className="w-8 h-8 rounded-full"

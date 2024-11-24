@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { WebAppUser } from "@/types/telegram";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { Navigation } from "./Navigation";
+import Image from "next/image";
 
 export function MainApp() {
   const [isReady, setIsReady] = useState(false);
@@ -29,7 +30,7 @@ export function MainApp() {
 
       setIsReady(true);
     }
-  }, []);
+  }, [webApp]);
 
   if (!isReady) {
     return <LoadingSpinner />;
@@ -54,7 +55,7 @@ export function MainApp() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 py-3">
         <div className="flex items-center gap-3">
           {user.photo_url && (
-            <img
+            <Image
               src={user.photo_url}
               alt={user.first_name}
               className="w-8 h-8 rounded-full"
