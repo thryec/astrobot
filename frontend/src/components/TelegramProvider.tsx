@@ -8,13 +8,21 @@ import { MainApp } from "./MainApp";
 export function TelegramProvider() {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    if (isDevelopment) {
+      setIsScriptLoaded(true);
+    }
+  }, [isDevelopment]);
 
   if (!isMounted) {
     return null;
+  }
+
+  if (isDevelopment) {
+    return <MainApp />;
   }
 
   return (

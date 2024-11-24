@@ -3,6 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-text-color: #000000;
+    --tg-theme-hint-color: #999999;
+    --tg-theme-link-color: #2481cc;
+    --tg-theme-button-color: #2481cc;
+    --tg-theme-button-text-color: #ffffff;
+  }
+
+  /* Dark mode support */
+  .dark {
+    --tg-theme-bg-color: #1c1c1c;
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-hint-color: #aaaaaa;
+    --tg-theme-link-color: #8cc2ee;
+    --tg-theme-button-color: #8cc2ee;
+    --tg-theme-button-text-color: #1c1c1c;
+  }
+
+  .app-background {
+    background-color: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+  }
   /* Safe area padding utilities */
   .safe-top {
     padding-top: env(safe-area-inset-top);

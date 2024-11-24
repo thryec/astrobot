@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { TelegramWebApp, WebAppUser } from "@/types/telegram";
+import { mockTelegramWebApp } from "@/lib/telegram";
 
 export const useTelegram = () => {
   const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
@@ -9,19 +10,20 @@ export const useTelegram = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const initTelegram = () => {
-      const tg = window.Telegram?.WebApp;
+      // Check if we're in development mode
+      const isDevelopment = process.env.NODE_ENV === "development";
+      const tg = isDevelopment ? mockTelegramWebApp : window.Telegram?.WebApp;
+
       if (tg) {
-        setWebApp(tg);
+        setWebApp(tg as TelegramWebApp);
         if (tg.initDataUnsafe?.user) {
           setUser(tg.initDataUnsafe.user);
         }
         tg.ready();
         setIsLoading(false);
-      } else {
-        // Retry if script isn't loaded yet
+      } else if (!isDevelopment) {
+        // Only retry in production
         setTimeout(initTelegram, 100);
       }
     };
@@ -33,5 +35,6 @@ export const useTelegram = () => {
     webApp,
     user,
     isLoading,
+    isDevelopment: process.env.NODE_ENV === "development",
   };
 };

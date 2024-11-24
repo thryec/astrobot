@@ -1,42 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { WebAppUser } from "@/types/telegram";
+import { useTelegram } from "@/hooks/useTelegram";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { Navigation } from "./Navigation";
-import Image from "next/image";
 
 export function MainApp() {
-  const [isReady, setIsReady] = useState(false);
-  const [user, setUser] = useState<WebAppUser | null>(null);
-  const [webApp, setWebApp] = useState<any>(null);
+  const { user, isLoading, isDevelopment } = useTelegram();
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
-      const tg = window.Telegram.WebApp;
-      setWebApp(tg);
-
-      if (tg.initDataUnsafe?.user) {
-        setUser(tg.initDataUnsafe.user);
-      }
-
-      // Initialize
-      tg.ready();
-      tg.expand();
-
-      // Set theme
-      document.documentElement.style.backgroundColor =
-        tg.themeParams.bg_color || "#ffffff";
-
-      setIsReady(true);
-    }
-  }, [webApp]);
-
-  if (!isReady) {
+  if (isLoading && !isDevelopment) {
     return <LoadingSpinner />;
   }
 
-  if (!user) {
+  if (!user && !isDevelopment) {
     return (
       <div className="flex min-h-[100dvh] items-center justify-center p-4">
         <div className="text-center">
@@ -50,18 +25,25 @@ export function MainApp() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh]">
+    <div className="flex flex-col min-h-[100dvh] app-background">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 py-3">
-        <div className="flex items-center gap-3">
-          {user.photo_url && (
-            <Image
-              src={user.photo_url}
-              alt={user.first_name}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img
+              src={user?.photo_url || "https://via.placeholder.com/32"}
+              alt={user?.first_name || "User"}
               className="w-8 h-8 rounded-full"
             />
+            <span className="font-medium truncate">
+              {user?.first_name || "Development Mode"}
+            </span>
+          </div>
+          {isDevelopment && (
+            <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
+              Dev Mode
+            </span>
           )}
-          <span className="font-medium truncate">{user.first_name}</span>
         </div>
       </header>
 
@@ -76,17 +58,18 @@ export function MainApp() {
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gray-200 rounded-full" />
                 <div>
-                  <h3 className="font-medium">User {item}</h3>
+                  <h3 className="font-medium">Sample User {item}</h3>
                   <p className="text-sm text-gray-500">2h ago</p>
                 </div>
               </div>
-              <p className="text-gray-700">Sample post content {item}</p>
+              <p className="text-gray-700">
+                This is a sample post that you can see in development mode.
+              </p>
             </div>
           ))}
         </div>
       </main>
 
-      {/* Navigation */}
       <Navigation />
     </div>
   );
