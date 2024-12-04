@@ -1,12 +1,14 @@
-import { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { NavBar } from "@/components/nav-bar";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Your App Name",
-  description: "Your app description",
+export const metadata = {
+  title: "Web3 Astrology",
+  description: "Discover your natal chart and relationship pairings",
 };
 
 export default function RootLayout({
@@ -16,7 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="min-h-screen flex flex-col pb-16">{children}</div>
+          <NavBar />
+          <Toaster />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
