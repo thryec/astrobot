@@ -93,8 +93,8 @@
 
 /* Prevent overscroll bounce */
 html {
-  overflow: hidden;
   overscroll-behavior: none;
+  height: 100%;
 }
 
 /* Remove tap highlight on mobile */
@@ -104,7 +104,8 @@ html {
 
 /* Smooth scrolling */
 body {
-  @apply overflow-hidden antialiased;
+  @apply overflow-y-auto overflow-x-hidden antialiased;
+  height: 100%;
 }
 
 /* Example Post Component */
