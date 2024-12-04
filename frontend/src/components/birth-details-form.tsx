@@ -37,9 +37,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: "Please enter a valid date in YYYY-MM-DD format.",
-  }),
+  birthDate: z.date(),
   birthTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
     message: "Please enter a valid time in HH:MM format.",
   }),
@@ -56,7 +54,7 @@ export function BirthDetailsForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      birthDate: "",
+      birthDate: undefined,
       birthTime: "",
       birthPlace: "",
     },
@@ -136,7 +134,9 @@ export function BirthDetailsForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
                         onSelect={field.onChange}
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
